@@ -5,7 +5,7 @@
 // Шлях у #include змініть відповідно до назви вашого проєкту.
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../pr6_4_rec/pr6_4_rec.cpp"
+#include "../PR6_4_rec/pr6_4_rec.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -105,45 +105,44 @@ namespace UnitTest_6_4_recursive
             Assert::AreEqual(5LL, ProductBetween(a, 1, 2));
         }
 
-        // ---- Collect: елементи a[i], a[i+2], ... записуються в t з позиції k ----
+        // ---- ShiftRight: елементи a[from..to-1] зсуваються на одну позицію вправо ----
 
-        TEST_METHOD(Collect_FromZero)
+        TEST_METHOD(ShiftRight_Middle)
         {
             int a[5] = { 1, 2, 3, 4, 5 };
-            int t[5] = { 0, 0, 0, 0, 0 };
-            Collect(a, 5, 0, t, 0);
-            Assert::AreEqual(1, t[0]);
-            Assert::AreEqual(3, t[1]);
-            Assert::AreEqual(5, t[2]);
+            ShiftRight(a, 1, 3);
+            Assert::AreEqual(1, a[0]);
+            Assert::AreEqual(2, a[1]);
+            Assert::AreEqual(2, a[2]);
+            Assert::AreEqual(3, a[3]);
+            Assert::AreEqual(5, a[4]);
         }
 
-        TEST_METHOD(Collect_FromOne)
+        TEST_METHOD(ShiftRight_OneElement)
         {
-            int a[5] = { 1, 2, 3, 4, 5 };
-            int t[5] = { 0, 0, 0, 0, 0 };
-            Collect(a, 5, 1, t, 3);
-            Assert::AreEqual(2, t[3]);
-            Assert::AreEqual(4, t[4]);
+            int a[3] = { 1, 2, 3 };
+            ShiftRight(a, 1, 2);
+            Assert::AreEqual(1, a[0]);
+            Assert::AreEqual(2, a[1]);
+            Assert::AreEqual(2, a[2]);
         }
 
-        // ---- Copy ----
-
-        TEST_METHOD(Copy_Basic)
+        TEST_METHOD(ShiftRight_EmptyRange)
         {
-            int src[4] = { 4, -1, 0, 9 };
-            int dst[4] = { 0, 0, 0, 0 };
-            Copy(src, dst, 4, 0);
-            for (int i = 0; i < 4; i++)
-                Assert::AreEqual(src[i], dst[i]);
+            int a[3] = { 1, 2, 3 };
+            ShiftRight(a, 1, 1);
+            Assert::AreEqual(1, a[0]);
+            Assert::AreEqual(2, a[1]);
+            Assert::AreEqual(3, a[2]);
         }
 
-        // ---- Rearrange: спочатку 1-й, 3-й, ... елементи, потім 2-й, 4-й, ... ----
+        // ---- Rearrange: спочатку елементи з номерами 1, 3, 5, ..., потім з номерами 0, 2, 4, ... ----
 
         TEST_METHOD(Rearrange_OddCount)
         {
             int a[5] = { 1, 2, 3, 4, 5 };
-            int expected[5] = { 1, 3, 5, 2, 4 };
-            Rearrange(a, 5);
+            int expected[5] = { 2, 4, 1, 3, 5 };
+            Rearrange(a, 5, 0);
             for (int i = 0; i < 5; i++)
                 Assert::AreEqual(expected[i], a[i]);
         }
@@ -151,8 +150,8 @@ namespace UnitTest_6_4_recursive
         TEST_METHOD(Rearrange_EvenCount)
         {
             int a[6] = { 1, 2, 3, 4, 5, 6 };
-            int expected[6] = { 1, 3, 5, 2, 4, 6 };
-            Rearrange(a, 6);
+            int expected[6] = { 2, 4, 6, 1, 3, 5 };
+            Rearrange(a, 6, 0);
             for (int i = 0; i < 6; i++)
                 Assert::AreEqual(expected[i], a[i]);
         }
@@ -160,8 +159,8 @@ namespace UnitTest_6_4_recursive
         TEST_METHOD(Rearrange_Three)
         {
             int a[3] = { 7, 8, 9 };
-            int expected[3] = { 7, 9, 8 };
-            Rearrange(a, 3);
+            int expected[3] = { 8, 7, 9 };
+            Rearrange(a, 3, 0);
             for (int i = 0; i < 3; i++)
                 Assert::AreEqual(expected[i], a[i]);
         }
@@ -169,15 +168,15 @@ namespace UnitTest_6_4_recursive
         TEST_METHOD(Rearrange_Two)
         {
             int a[2] = { 7, 8 };
-            Rearrange(a, 2);
-            Assert::AreEqual(7, a[0]);
-            Assert::AreEqual(8, a[1]);
+            Rearrange(a, 2, 0);
+            Assert::AreEqual(8, a[0]);
+            Assert::AreEqual(7, a[1]);
         }
 
         TEST_METHOD(Rearrange_OneElement)
         {
             int a[1] = { 3 };
-            Rearrange(a, 1);
+            Rearrange(a, 1, 0);
             Assert::AreEqual(3, a[0]);
         }
 
